@@ -1,3 +1,4 @@
+#include "core/game_mode_helpers.hpp"
 #include "core/jsonc_parser.hpp"
 #include "core/module_interfaces.hpp"
 #include "core/priority_launcher_helpers.hpp"
@@ -185,6 +186,30 @@ void TestPriorityLauncherHelpersAndLaunch() {
     std::cout << "[PASS] TestPriorityLauncherHelpersAndLaunch\n";
 }
 
+void TestDynamicGameModeSafetyAndRestore() {
+    using namespace WinOpty::Modules::Detail;
+    assert(IsProtectedSystemProcess("csrss.exe"));
+    assert(IsProtectedSystemProcess("LSASS.EXE"));
+    assert(IsProtectedSystemProcess("dwm.exe"));
+    assert(IsProtectedSystemProcess("vgc.exe"));
+    assert(IsProtectedSystemProcess("EasyAntiCheat.exe"));
+    assert(!IsThrottableBackgroundProcess("explorer.exe"));
+    assert(!IsThrottableBackgroundProcess("dwm.exe"));
+    assert(IsThrottableBackgroundProcess("SearchIndexer.exe"));
+    assert(IsThrottableBackgroundProcess("OneDrive.exe"));
+
+    WinOpty::Modules::DynamicGameMode gm;
+    assert(!gm.OnGameStart(0).ok);
+    assert(!gm.OnGameExit(0).ok);
+
+    auto startRes = gm.OnGameStart(999999);
+    assert(startRes.ok);
+    auto exitRes = gm.OnGameExit(999999);
+    assert(exitRes.ok);
+
+    std::cout << "[PASS] TestDynamicGameModeSafetyAndRestore\n";
+}
+
 } // namespace
 
 int main() {
@@ -193,6 +218,7 @@ int main() {
     TestPresetsAndTweakEngineDryRun();
     TestCacheCleanerSandbox();
     TestPriorityLauncherHelpersAndLaunch();
+    TestDynamicGameModeSafetyAndRestore();
     std::cout << "\nTodos los tests unitarios de Parte A pasaron correctamente.\n";
     return 0;
 }
