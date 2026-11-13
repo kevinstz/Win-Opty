@@ -26,10 +26,10 @@
 - [x] **TASK-A7: Toolchain C++, Compilacion Real y Pruebas Unitarias**
   - **Rama:** `feat/part-a-toolchain-and-tests`
   - **Que hare:** Instalar `CMake` + compilador C++ (`WinLibs` / `Ninja`), compilar `win-opty.exe` y `win-opty-tests.exe`, ejecutar `ctest --output-on-failure` y verificar la CLI (`--scan-cache`, `--apply-preset extreme --dry-run`).
-- [~] **TASK-A8: Lanzador de Juegos con Prioridad (`src/core/priority_launcher.cpp`)**
+- [x] **TASK-A8: Lanzador de Juegos con Prioridad (`src/core/priority_launcher.cpp`)**
   - **Rama:** `feat/part-a-priority-launcher`
   - **Que hare:** Escanear bibliotecas instaladas (Steam `libraryfolders.vdf`, Epic Manifests, GOG, Ubisoft, EA, Battle.net, Rockstar), asociar perfiles de `src/presets/profiles/*.jsonc`, limpiar RAM previa con `MemoryCleaner::ExecuteTrim()`, asignar afinidad de nucleos preferidos y lanzar con `HIGH_PRIORITY_CLASS` (con pruebas unitarias sobre manifests de prueba).
-- [ ] **TASK-A9: Modo Juego Dinamico (`src/core/game_mode.cpp`)**
+- [~] **TASK-A9: Modo Juego Dinamico (`src/core/game_mode.cpp`)**
   - **Rama:** `feat/part-a-game-mode`
   - **Que hare:** Implementar `OnGameStart(pid)` y `OnGameExit(pid)` con whitelist/blacklist estricta (nunca tocar procesos criticos de Windows ni anti-cheats), bajada segura de prioridad de procesos secundarios permitidos y restauracion exacta al cerrar el juego (con pruebas automatizadas).
 - [x] **TASK-A10: Scripts Multi-OS Linux y macOS (`scripts/linux/*`, `scripts/macos/*`)**
