@@ -1,0 +1,30 @@
+// ============================================================================
+// Preset EXTREMO: maximo rendimiento competitivo (todos los packs reversibles)
+// ============================================================================
+{
+  "presetId": "EXTREMO",
+  "displayName": "Extremo (Competitivo)",
+  "description": "Aplica MMCSS completo, HAGS, TCPNoDelay/TcpAckFrequency, Win32PrioritySeparation=38 y telemetria minima.",
+  "createRestorePoint": true,
+  "memoryCleaner": {
+    "clearSystemWorkingSet": true,
+    "clearStandbyPageLists": true,
+    "clearModifiedPageLists": false,
+    "autoCleanThresholdPct": 70,
+    "intervalSeconds": 180
+  },
+  "cacheCleaner": {
+    "cleanOsTempFiles": true,
+    "cleanShaderCaches": true,
+    "cleanBrowserCaches": false,
+    "cleanGameLogs": true
+  },
+  "enabledPackIds": [
+    "gaming.mmcss_scheduler",
+    "gpu.hags_and_gamedvr",
+    "cpu.priority_separation",
+    "network.competitive_tcp",
+    "privacy.telemetry_debloat",
+    "system.startup_manager"
+  ]
+}
