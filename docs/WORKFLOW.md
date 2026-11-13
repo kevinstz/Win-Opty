@@ -1,47 +1,50 @@
-# Flujo de Trabajo Colaborativo (Multi-IA / Equipo)
+# Flujo de Trabajo Colaborativo (Multi-IA / Equipo en Simultaneo)
 
-Este proyecto divide la implementacion en **Parte A** y **Parte B** para que dos agentes o desarrolladores trabajen en paralelo con **cero conflictos de merge**.
+Este proyecto divide el trabajo en paralelo entre **Agente A** y **Agente B (Otra IA / Colaborador)** para trabajar al mismo tiempo con **cero conflictos de merge**.
 
 ## 1. Estructura de Ramas (Git Flow Ligero)
 
-- `main`: rama estable y revisada (solo recibe merges verificados desde `dev`).
-- `dev`: rama de integracion donde convergen las entregas de Parte A y Parte B.
-- `feat/part-a-*`: ramas usadas en la primera mitad (cimientos, presets, backups, tweaks, RAM, cache, scripts Windows).
-- `feat/part-b-*`: ramas asignadas a la segunda IA / colaborador (monitor, lanzador, modo juego, overlay/benchmark, UI, Linux/macOS).
+- `main`: rama estable publicada (contiene la base verificada + `TASKS.md` actualizado).
+- `dev`: rama de integracion donde convergen las entregas de Agente A y Agente B.
+- `feat/part-a-*`: ramas trabajadas por **Agente A**.
+- `feat/part-b-*`: ramas trabajadas por **Agente B (Otra IA / Colaborador)**.
 
-## 2. Regla de Propiedad de Archivos (Anti-Conflictos)
+## 2. Mapa de Propiedad de Archivos (Trabajo Simultaneo)
 
-| Carpeta / Archivo | Responsable Principal | Regla |
+| Carpeta / Archivo | Responsable | Regla anti-conflicto |
 | :--- | :--- | :--- |
-| `src/core/engine_config.hpp`, `src/core/module_interfaces.hpp` | Compartido (definido en Parte A) | Parte B solo **consume** estas interfaces; si necesita ampliarlas, hacerlo en un commit pequeno previo en `dev`. |
-| `src/core/restore_point.*`, `tweak_engine.*`, `memory_cleaner.*`, `cache_cleaner.*` | **Parte A** | No modificar desde ramas `feat/part-b-*` salvo bugfix puntual. |
-| `src/presets/*`, `scripts/windows/*` | **Parte A** | Base declarativa lista para ser leida por Parte B (`priority_launcher`, `main_window`). |
-| `src/core/hardware_monitor.*`, `priority_launcher.*`, `game_mode.*`, `overlay_hud.*` | **Parte B** | Actualmente son stubs en `dev`; Parte B los reemplaza con la implementacion real. |
-| `src/ui/tray_controller.*`, `src/ui/main_window.*` | **Parte B** | Implementan la GUI y llaman a las APIs de Parte A y Parte B. |
-| `scripts/linux/*`, `scripts/macos/*`, `docs/AUDIT_AND_BENCHMARKS.md` | **Parte B** | Completar paridad multi-OS y documentacion de pruebas. |
-| `TASKS.md` | Ambos | Cada agente actualiza el estado (`[ ]` -> `[~]` -> `[x]`) de su tarea al terminarla. |
+| `src/core/engine_config.hpp`, `src/core/module_interfaces.hpp` | Compartido (estable) | No cambiar firmas publicas sin coordinar en `dev`. |
+| `src/core/restore_point.*`, `tweak_engine.*`, `memory_cleaner.*`, `cache_cleaner.*` | **Agente A** | Base ya completada y validada. |
+| `src/core/priority_launcher.cpp`, `src/core/game_mode.cpp` | **Agente A** | En implementacion activa en paralelo (`TASK-A8`, `TASK-A9`). |
+| `scripts/windows/*`, `scripts/linux/*`, `scripts/macos/*` | **Agente A** | Windows listo; Linux/macOS en `TASK-A10`. |
+| `src/core/hardware_monitor.cpp`, `src/core/overlay_hud.cpp` | **Agente B** | Exclusivos de Parte B (`TASK-B1`, `TASK-B4`). |
+| `src/ui/tray_controller.*`, `src/ui/main_window.*` | **Agente B** | Exclusivos de Parte B (`TASK-B5`). |
+| `.github/workflows/ci.yml`, `LICENSE`, `docs/AUDIT_AND_BENCHMARKS.md` | **Agente B** | Exclusivos de Parte B (`TASK-B7`). |
+| `tests/test_part_b_*.cpp` | **Agente B** | Crear archivos de test separados para no chocar con `tests/test_core_part_a.cpp`. |
 
-## 3. Ciclo Diario Recomendado para la Otra IA / Colaborador
+## 3. Ciclo para Trabajar en Simultaneo
 
 ```bash
-# 1. Asegurar estar al dia con dev
+# 1. Partir siempre desde dev actualizado
+git fetch origin
 git checkout dev
-git pull origin dev   # (o usar la rama dev local)
+git pull origin dev
 
-# 2. Crear una rama por tarea del tablero TASKS.md
+# 2. Crear una rama exclusiva para tu tarea de TASKS.md
 git checkout -b feat/part-b-hardware-monitor
 
-# 3. Implementar solo los archivos de esa tarea y sus tests
-# 4. Ejecutar pruebas antes de hacer merge
+# 3. Implementar solo los archivos asignados a tu tarea + tus tests
+# 4. Verificar antes de integrar
 powershell -ExecutionPolicy Bypass -File tests/test_presets_and_scripts.ps1
-# Si hay CMake/compilador instalado:
 cmake -B build && cmake --build build && ctest --test-dir build --output-on-failure
 
-# 5. Commit atomico + actualizar TASKS.md + merge a dev
-git add <archivos> TASKS.md
+# 5. Commit atomico, actualizar tu check [x] en TASKS.md y hacer merge a dev
+git add <tus_archivos> TASKS.md
 git commit -m "feat(monitor): implement native CPU/GPU/RAM telemetry polling"
 git checkout dev
+git pull origin dev
 git merge --no-ff feat/part-b-hardware-monitor
+git push origin dev
 ```
 
 ## 4. Criterios de Calidad Obligatorios
