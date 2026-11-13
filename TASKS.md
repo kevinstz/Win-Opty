@@ -32,7 +32,7 @@
 - [ ] **TASK-A9: Modo Juego Dinamico (`src/core/game_mode.cpp`)**
   - **Rama:** `feat/part-a-game-mode`
   - **Que hare:** Implementar `OnGameStart(pid)` y `OnGameExit(pid)` con whitelist/blacklist estricta (nunca tocar procesos criticos de Windows ni anti-cheats), bajada segura de prioridad de procesos secundarios permitidos y restauracion exacta al cerrar el juego (con pruebas automatizadas).
-- [ ] **TASK-A10: Scripts Multi-OS Linux y macOS (`scripts/linux/*`, `scripts/macos/*`)**
+- [x] **TASK-A10: Scripts Multi-OS Linux y macOS (`scripts/linux/*`, `scripts/macos/*`)**
   - **Rama:** `feat/part-a-multi-os-scripts`
   - **Que hare:** Crear `99-winopty.conf`, `apply_linux.sh`, `drop_caches.sh`, `gamemode_mangohud.sh`, `apply_macos.sh`, `purge_and_metal.sh`, `launch_pcores.sh` y validar sintaxis con `bash -n`.
 

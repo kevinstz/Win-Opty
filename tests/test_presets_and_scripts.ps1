@@ -165,6 +165,26 @@ foreach ($rel in $expectedCppFiles) {
     Assert-True (Test-Path -LiteralPath $full) "Archivo presente: $rel"
 }
 
+Write-Host "`n=== 5. Validando scripts Multi-OS (Linux/macOS) con Bash ===" -ForegroundColor Cyan
+$bashExe = "C:\Program Files\Git\bin\bash.exe"
+if (Test-Path -LiteralPath $bashExe) {
+    $shFiles = Get-ChildItem -Path (Join-Path $repoRoot "scripts") -Filter "*.sh" -Recurse
+    Assert-True ($shFiles.Count -ge 6) "Se encontraron $($shFiles.Count) scripts .sh"
+    foreach ($sh in $shFiles) {
+        $unixPath = $sh.FullName.Replace('\', '/')
+        & $bashExe -n $unixPath
+        Assert-True ($LASTEXITCODE -eq 0) "Sintaxis Bash limpia: $($sh.FullName.Substring($repoRoot.Length + 1))"
+    }
+
+    $linuxDry = (& $bashExe ((Join-Path $repoRoot "scripts\linux\apply_linux.sh").Replace('\', '/')) --dry-run *>&1) | Out-String
+    Assert-True ($LASTEXITCODE -eq 0 -and $linuxDry -match "\[DRY-RUN\]") "apply_linux.sh --dry-run ok"
+
+    $macDry = (& $bashExe ((Join-Path $repoRoot "scripts\macos\apply_macos.sh").Replace('\', '/')) --dry-run *>&1) | Out-String
+    Assert-True ($LASTEXITCODE -eq 0 -and $macDry -match "\[DRY-RUN\]") "apply_macos.sh --dry-run ok"
+} else {
+    Write-Host "[WARN] Git Bash no encontrado; se omite bash -n" -ForegroundColor Yellow
+}
+
 Write-Host "`nResultado final: $failures fallos." -ForegroundColor $(if ($failures -eq 0) { "Green" } else { "Red" })
 if ($failures -gt 0) {
     exit 1
