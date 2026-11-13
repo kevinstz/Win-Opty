@@ -18,21 +18,21 @@
 
 ---
 
-## Cola Asignada a Agente A (Yo — En curso en paralelo)
+## Cola Asignada a Agente A (Yo — Completada)
 
 > **Propiedad exclusiva de archivos mientras se ejecutan estas tareas:**
 > `CMakeLists.txt`, `src/core/priority_launcher.cpp`, `src/core/game_mode.cpp`, `scripts/linux/*`, `scripts/macos/*`, `tests/test_core_part_a.cpp`, `tests/test_presets_and_scripts.ps1`.
 
-- [~] **TASK-A7: Toolchain C++, Compilacion Real y Pruebas Unitarias**
+- [x] **TASK-A7: Toolchain C++, Compilacion Real y Pruebas Unitarias**
   - **Rama:** `feat/part-a-toolchain-and-tests`
   - **Que hare:** Instalar `CMake` + compilador C++ (`WinLibs` / `Ninja`), compilar `win-opty.exe` y `win-opty-tests.exe`, ejecutar `ctest --output-on-failure` y verificar la CLI (`--scan-cache`, `--apply-preset extreme --dry-run`).
-- [ ] **TASK-A8: Lanzador de Juegos con Prioridad (`src/core/priority_launcher.cpp`)**
+- [x] **TASK-A8: Lanzador de Juegos con Prioridad (`src/core/priority_launcher.cpp`)**
   - **Rama:** `feat/part-a-priority-launcher`
   - **Que hare:** Escanear bibliotecas instaladas (Steam `libraryfolders.vdf`, Epic Manifests, GOG, Ubisoft, EA, Battle.net, Rockstar), asociar perfiles de `src/presets/profiles/*.jsonc`, limpiar RAM previa con `MemoryCleaner::ExecuteTrim()`, asignar afinidad de nucleos preferidos y lanzar con `HIGH_PRIORITY_CLASS` (con pruebas unitarias sobre manifests de prueba).
-- [ ] **TASK-A9: Modo Juego Dinamico (`src/core/game_mode.cpp`)**
+- [x] **TASK-A9: Modo Juego Dinamico (`src/core/game_mode.cpp`)**
   - **Rama:** `feat/part-a-game-mode`
   - **Que hare:** Implementar `OnGameStart(pid)` y `OnGameExit(pid)` con whitelist/blacklist estricta (nunca tocar procesos criticos de Windows ni anti-cheats), bajada segura de prioridad de procesos secundarios permitidos y restauracion exacta al cerrar el juego (con pruebas automatizadas).
-- [ ] **TASK-A10: Scripts Multi-OS Linux y macOS (`scripts/linux/*`, `scripts/macos/*`)**
+- [x] **TASK-A10: Scripts Multi-OS Linux y macOS (`scripts/linux/*`, `scripts/macos/*`)**
   - **Rama:** `feat/part-a-multi-os-scripts`
   - **Que hare:** Crear `99-winopty.conf`, `apply_linux.sh`, `drop_caches.sh`, `gamemode_mangohud.sh`, `apply_macos.sh`, `purge_and_metal.sh`, `launch_pcores.sh` y validar sintaxis con `bash -n`.
 

@@ -1,5 +1,6 @@
 #include "core/module_interfaces.hpp"
 
+#include <cstring>
 #include <sstream>
 
 #ifdef _WIN32
@@ -87,7 +88,7 @@ bool MemoryCleaner::ShouldAutoClean() const {
 
 Core::Result MemoryCleaner::ExecuteTrim() {
 #ifdef _WIN32
-    Core::Result privRes = EnablePrivilege(SE_PROFILE_SINGLE_PROCESS_NAME);
+    Core::Result privRes = EnablePrivilege(SE_PROF_SINGLE_PROCESS_NAME);
     if (!privRes.ok) {
         return privRes;
     }
@@ -97,8 +98,10 @@ Core::Result MemoryCleaner::ExecuteTrim() {
         return Core::Result::Fail(Core::StatusCode::SystemApiError, "No se encontro ntdll.dll");
     }
 
-    auto ntSetSysInfo = reinterpret_cast<NtSetSystemInformationFn>(
-        GetProcAddress(ntdll, "NtSetSystemInformation"));
+    FARPROC proc = GetProcAddress(ntdll, "NtSetSystemInformation");
+    NtSetSystemInformationFn ntSetSysInfo = nullptr;
+    static_assert(sizeof(ntSetSysInfo) == sizeof(proc));
+    std::memcpy(&ntSetSysInfo, &proc, sizeof(ntSetSysInfo));
     if (!ntSetSysInfo) {
         return Core::Result::Fail(Core::StatusCode::SystemApiError,
             "No se pudo resolver NtSetSystemInformation");
