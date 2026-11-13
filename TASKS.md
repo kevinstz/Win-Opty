@@ -6,14 +6,14 @@
 
 ---
 
-## Donde estoy empezando ahora (Agente A — Parte A, ~50%)
+## Parte A — Completada por Agente A (~50%, base y motor seguro)
 
-Estoy iniciando la construccion desde los **cimientos seguros del proyecto**: estructura de carpetas, flujo Git con ramas, contratos C++ compartidos, presets declarativos `jsonc`, scripts verificables de Windows PowerShell, el motor transaccional de respaldo/tweaks, el limpiador nativo de RAM y el limpiador selectivo de cache.
+Se construyeron los **cimientos seguros del proyecto**: estructura de carpetas, flujo Git con ramas, contratos C++ compartidos, presets declarativos `jsonc`, scripts verificables de Windows PowerShell, el motor transaccional de respaldo/tweaks, el limpiador nativo de RAM y el limpiador selectivo de cache. *(Nota: el codigo C++ esta listo en `src/` y `tests/`, pendiente de compilar una vez se instale `CMake` + compilador C++ en el equipo).*
 
 ### Sprint A1 — Infraestructura, Flujo y Contratos
 - [x] **TASK-A0: Estructura base, CMake y Flujo Git** (`feat/part-a-structure-and-tasks`)
   - Crear arbol de carpetas (`src/`, `scripts/`, `docs/`, `tests/`), `.gitignore`, `CMakeLists.txt`, `docs/WORKFLOW.md`, `docs/ARCHITECTURE.md` y este `TASKS.md`.
-- [~] **TASK-A1: Contratos compartidos e interfaces** (`feat/part-a-core-modules`)
+- [x] **TASK-A1: Contratos compartidos e interfaces** (`feat/part-a-core-modules`)
   - Implementar `src/core/engine_config.hpp` y `src/core/module_interfaces.hpp` con todas las estructuras de `README.md` para desbloquear el trabajo en paralelo de Parte B.
 
 ### Sprint A2 — Capa Declarativa y Scripts Verificables (Windows)
@@ -23,11 +23,11 @@ Estoy iniciando la construccion desde los **cimientos seguros del proyecto**: es
   - Crear `scripts/windows/common_backup.ps1`, `apply_extreme.ps1`, `rollback_tweaks.ps1` y `verify_state.ps1` con soporte `-DryRun`.
 
 ### Sprint A3 — Nucleo C++ Parte A + Pruebas
-- [ ] **TASK-A4: Motor de Respaldo y Tweaks Transaccionales** (`feat/part-a-core-modules`)
+- [x] **TASK-A4: Motor de Respaldo y Tweaks Transaccionales** (`feat/part-a-core-modules`)
   - Implementar `src/core/restore_point.{hpp,cpp}` y `src/core/tweak_engine.{hpp,cpp}` (incluye parser JSONC propio sin dependencias externas, lectura/escritura segura en registro Windows y rollback).
-- [ ] **TASK-A5: Limpiador Nativo de RAM y Limpiador de Cache** (`feat/part-a-core-modules`)
+- [x] **TASK-A5: Limpiador Nativo de RAM y Limpiador de Cache** (`feat/part-a-core-modules`)
   - Implementar `src/core/memory_cleaner.{hpp,cpp}` (`NtSetSystemInformation` + `SE_PROFILE_SINGLE_PROCESS_NAME`) y `src/core/cache_cleaner.{hpp,cpp}` (`ScanRecoverableBytes` + limpieza segura).
-- [ ] **TASK-A6: CLI Bootstrap, Stubs de Parte B y Suite de Pruebas** (`feat/part-a-core-modules`)
+- [x] **TASK-A6: CLI Bootstrap, Stubs de Parte B y Suite de Pruebas** (`feat/part-a-core-modules`)
   - Implementar `src/main.cpp`, stubs compilables para los modulos de Parte B, `tests/test_presets_and_scripts.ps1` y `tests/test_core_part_a.cpp`.
 
 ---
