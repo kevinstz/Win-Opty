@@ -1,0 +1,29 @@
+# Build outputs
+build/
+out/
+cmake-build-*/
+*.exe
+*.dll
+*.lib
+*.obj
+*.pdb
+*.ilk
+*.exp
+
+# IDE & Editors
+.vs/
+.vscode/
+*.user
+*.suo
+*.sln
+*.vcxproj*
+
+# Runtime backups & logs generated locally during testing
+backups/
+logs/
+*.dmp
+*.log
+
+# OS files
+Thumbs.db
+.DS_Store
