@@ -1,0 +1,207 @@
+// ============================================================================
+// Win-Opty — Catalogo Declarativo de Packs, Presets y Respaldo
+// ============================================================================
+{
+  "schemaVersion": "1.0.0",
+  "activePreset": "SEGURO",
+
+  // Punto de seguridad automatico antes de aplicar cambios criticos
+  "safetyRestore": {
+    "createWindowsRestorePoint": true,
+    "exportStateBackupPath": "./backups/last_known_good.json",
+    "reapplyOnOsUpdate": true
+  },
+
+  // Packs auditables: cada ajuste declara sus operaciones y estado por defecto
+  "tweakPacks": [
+    {
+      "id": "gaming.mmcss_scheduler",
+      "category": "Gaming y Rendimiento",
+      "description": "Reserva el 90% de tiempo de CPU para procesos multimedia/juegos y sube la prioridad de GPU a 8.",
+      "enabled": true,
+      "reversible": true,
+      "minPreset": "MEDIO",
+      "registryChanges": [
+        {
+          "hive": "HKLM",
+          "subkey": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile",
+          "name": "SystemResponsiveness",
+          "type": "DWORD",
+          "targetValue": 10,
+          "defaultWindowsValue": 20
+        },
+        {
+          "hive": "HKLM",
+          "subkey": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile",
+          "name": "NetworkThrottlingIndex",
+          "type": "DWORD",
+          "targetValue": 4294967295,
+          "defaultWindowsValue": 10
+        },
+        {
+          "hive": "HKLM",
+          "subkey": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games",
+          "name": "GPU Priority",
+          "type": "DWORD",
+          "targetValue": 8,
+          "defaultWindowsValue": 8
+        },
+        {
+          "hive": "HKLM",
+          "subkey": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games",
+          "name": "Priority",
+          "type": "DWORD",
+          "targetValue": 6,
+          "defaultWindowsValue": 2
+        },
+        {
+          "hive": "HKLM",
+          "subkey": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games",
+          "name": "Scheduling Category",
+          "type": "STRING",
+          "targetValue": "High",
+          "defaultWindowsValue": "Medium"
+        },
+        {
+          "hive": "HKLM",
+          "subkey": "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Multimedia\\SystemProfile\\Tasks\\Games",
+          "name": "SFIO Priority",
+          "type": "STRING",
+          "targetValue": "High",
+          "defaultWindowsValue": "Normal"
+        }
+      ]
+    },
+    {
+      "id": "gpu.hags_and_gamedvr",
+      "category": "Planificacion de GPU",
+      "description": "Activa Hardware-Accelerated GPU Scheduling (HAGS) y desactiva captura en segundo plano de Game DVR.",
+      "enabled": true,
+      "reversible": true,
+      "minPreset": "MEDIO",
+      "registryChanges": [
+        {
+          "hive": "HKLM",
+          "subkey": "SYSTEM\\CurrentControlSet\\Control\\GraphicsDrivers",
+          "name": "HwSchMode",
+          "type": "DWORD",
+          "targetValue": 2,
+          "defaultWindowsValue": 1
+        },
+        {
+          "hive": "HKCU",
+          "subkey": "System\\GameConfigStore",
+          "name": "GameDVR_Enabled",
+          "type": "DWORD",
+          "targetValue": 0,
+          "defaultWindowsValue": 1
+        },
+        {
+          "hive": "HKCU",
+          "subkey": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\GameDVR",
+          "name": "AppCaptureEnabled",
+          "type": "DWORD",
+          "targetValue": 0,
+          "defaultWindowsValue": 1
+        }
+      ]
+    },
+    {
+      "id": "cpu.priority_separation",
+      "category": "Planificador de CPU",
+      "description": "Ajusta Win32PrioritySeparation a 0x26 (38 decimal): intervalos cortos variables y prioridad 3:1 en primer plano.",
+      "enabled": true,
+      "reversible": true,
+      "minPreset": "EXTREMO",
+      "registryChanges": [
+        {
+          "hive": "HKLM",
+          "subkey": "SYSTEM\\CurrentControlSet\\Control\\PriorityControl",
+          "name": "Win32PrioritySeparation",
+          "type": "DWORD",
+          "targetValue": 38,
+          "defaultWindowsValue": 2
+        }
+      ]
+    },
+    {
+      "id": "network.competitive_tcp",
+      "category": "Red para Competitivo",
+      "description": "Desactiva el algoritmo de Nagle (TCPNoDelay=1) y fuerza confirmacion inmediata de paquetes (TcpAckFrequency=1).",
+      "enabled": true,
+      "reversible": true,
+      "minPreset": "MEDIO",
+      "perInterfaceTcpKey": "SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces",
+      "registryChanges": [
+        {
+          "hive": "HKLM",
+          "subkey": "SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\*",
+          "name": "TcpAckFrequency",
+          "type": "DWORD",
+          "targetValue": 1,
+          "defaultWindowsValue": 2
+        },
+        {
+          "hive": "HKLM",
+          "subkey": "SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\*",
+          "name": "TCPNoDelay",
+          "type": "DWORD",
+          "targetValue": 1,
+          "defaultWindowsValue": 0
+        },
+        {
+          "hive": "HKLM",
+          "subkey": "SYSTEM\\CurrentControlSet\\Services\\Tcpip\\Parameters\\Interfaces\\*",
+          "name": "TcpDelAckTicks",
+          "type": "DWORD",
+          "targetValue": 0,
+          "defaultWindowsValue": 2
+        }
+      ]
+    },
+    {
+      "id": "privacy.telemetry_debloat",
+      "category": "Privacidad y Debloat",
+      "description": "Reduce recoleccion de telemetria y sugerencias del sistema de forma reversible.",
+      "enabled": false,
+      "reversible": true,
+      "minPreset": "MEDIO",
+      "registryChanges": [
+        {
+          "hive": "HKLM",
+          "subkey": "SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection",
+          "name": "AllowTelemetry",
+          "type": "DWORD",
+          "targetValue": 0,
+          "defaultWindowsValue": 1
+        },
+        {
+          "hive": "HKCU",
+          "subkey": "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+          "name": "SubscribedContent-338389Enabled",
+          "type": "DWORD",
+          "targetValue": 0,
+          "defaultWindowsValue": 1
+        }
+      ]
+    },
+    {
+      "id": "system.startup_manager",
+      "category": "Apps de Inicio",
+      "description": "Marca lanzadores secundarios para arranque manual sin eliminar sus entradas originales.",
+      "enabled": false,
+      "reversible": true,
+      "minPreset": "EXTREMO",
+      "registryChanges": []
+    },
+    {
+      "id": "setup.fresh_os_wizard",
+      "category": "Asistente Post-Instalacion",
+      "description": "Flujo guiado para sistemas recien instalados: punto de restauracion, energia y verificacion de runtimes.",
+      "enabled": false,
+      "reversible": true,
+      "minPreset": "SEGURO",
+      "registryChanges": []
+    }
+  ]
+}

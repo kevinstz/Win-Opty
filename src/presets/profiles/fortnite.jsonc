@@ -1,0 +1,14 @@
+// ============================================================================
+// Perfil Competitivo: Fortnite
+// ============================================================================
+{
+  "executable": "FortniteClient-Win64-Shipping.exe",
+  "profileName": "Perfil Competitivo Fortnite",
+  "cpuPriority": "High",
+  "bindFastCoresOnly": true,
+  "preCleanRamOnStart": true,
+  "disableFullscreenOptimizations": false,
+  "clearShaderCacheOnUpdate": true,
+  "launchArguments": "-USEALLAVAILABLECORES -nosplash -high",
+  "suspendBackgroundServices": true
+}

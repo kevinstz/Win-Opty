@@ -1,0 +1,15 @@
+// ============================================================================
+// Perfil Competitivo: VALORANT
+// ============================================================================
+{
+  "executable": "VALORANT-Win64-Shipping.exe",
+  "profileName": "Perfil Competitivo VALORANT",
+  "cpuPriority": "High",
+  "bindFastCoresOnly": true,
+  "preCleanRamOnStart": true,
+  "disableFullscreenOptimizations": false,
+  "clearShaderCacheOnUpdate": true,
+  "launchArguments": "",
+  "suspendBackgroundServices": true,
+  "notes": "No inyectar DLLs en proceso; usar overlay externo ETW/PresentMon y respetar vgc/vgk."
+}

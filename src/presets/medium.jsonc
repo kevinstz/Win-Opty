@@ -1,0 +1,28 @@
+// ============================================================================
+// Preset MEDIO: gaming diario equilibrado (MMCSS, HAGS, Red Competitiva, Debloat)
+// ============================================================================
+{
+  "presetId": "MEDIO",
+  "displayName": "Medio (Gaming Diario)",
+  "description": "Activa planificacion multimedia MMCSS, HAGS, desactiva GameDVR y optimiza TCP para menor latencia.",
+  "createRestorePoint": true,
+  "memoryCleaner": {
+    "clearSystemWorkingSet": true,
+    "clearStandbyPageLists": true,
+    "clearModifiedPageLists": false,
+    "autoCleanThresholdPct": 75,
+    "intervalSeconds": 300
+  },
+  "cacheCleaner": {
+    "cleanOsTempFiles": true,
+    "cleanShaderCaches": true,
+    "cleanBrowserCaches": false,
+    "cleanGameLogs": true
+  },
+  "enabledPackIds": [
+    "gaming.mmcss_scheduler",
+    "gpu.hags_and_gamedvr",
+    "network.competitive_tcp",
+    "privacy.telemetry_debloat"
+  ]
+}
