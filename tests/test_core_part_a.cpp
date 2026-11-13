@@ -1,5 +1,6 @@
 #include "core/jsonc_parser.hpp"
 #include "core/module_interfaces.hpp"
+#include "core/priority_launcher_helpers.hpp"
 #include "core/restore_point.hpp"
 #include "core/tweak_engine.hpp"
 
@@ -123,6 +124,67 @@ void TestCacheCleanerSandbox() {
     std::cout << "[PASS] TestCacheCleanerSandbox\n";
 }
 
+void TestPriorityLauncherHelpersAndLaunch() {
+    fs::path tmpDir = fs::temp_directory_path() / "winopty_test_launcher";
+    fs::remove_all(tmpDir);
+    fs::create_directories(tmpDir);
+
+    // 1. Probar parser VDF de bibliotecas Steam
+    fs::path vdfFile = tmpDir / "libraryfolders.vdf";
+    {
+        std::ofstream ofs(vdfFile, std::ios::binary);
+        ofs << "\"libraryfolders\"\n{\n  \"0\"\n  {\n    \"path\" \"C:\\\\Program Files (x86)\\\\Steam\"\n  }\n  \"1\"\n  {\n    \"path\" \"D:\\\\SteamLibrary\"\n  }\n}\n";
+    }
+    auto libs = WinOpty::Modules::Detail::ExtractSteamLibraryPaths(vdfFile.string(), "C:\\Program Files (x86)\\Steam");
+    assert(libs.size() == 2);
+
+    // 2. Probar parser de manifiesto Epic + cruce con perfil competitivo
+#ifdef WINOPTY_DEFAULT_PRESETS_DIR
+    std::string profilesDir = std::string(WINOPTY_DEFAULT_PRESETS_DIR) + "/profiles";
+#else
+    std::string profilesDir = "src/presets/profiles";
+#endif
+    auto profiles = WinOpty::Modules::Detail::LoadCompetitiveProfiles(profilesDir);
+    assert(profiles.find("fortniteclient-win64-shipping.exe") != profiles.end());
+
+    fs::path epicItem = tmpDir / "fortnite.item";
+    {
+        std::ofstream ofs(epicItem, std::ios::binary);
+        ofs << R"({
+            "DisplayName": "Fortnite",
+            "InstallLocation": "C:\\Games\\Fortnite",
+            "LaunchExecutable": "FortniteGame\\Binaries\\Win64\\FortniteClient-Win64-Shipping.exe",
+            "LaunchCommand": ""
+        })";
+    }
+    WinOpty::Modules::DetectedGame game;
+    assert(WinOpty::Modules::Detail::ParseEpicManifestItem(epicItem.string(), profiles, game));
+    assert(game.platform == "Epic Games");
+    assert(game.launchArgs.find("-USEALLAVAILABLECORES") != std::string::npos);
+
+    // 3. Probar escaneo real del sistema (no debe fallar aunque no haya juegos) y validacion de ruta inexistente
+    WinOpty::Modules::PriorityLauncher launcher;
+    launcher.preCleanRamOnStart = false;
+    auto installed = launcher.ScanInstalledGames();
+    (void)installed;
+
+    WinOpty::Modules::DetectedGame missing{"Custom", "Fake", (tmpDir / "missing.exe").string(), ""};
+    auto missingRes = launcher.LaunchGame(missing);
+    assert(!missingRes.ok);
+
+#ifdef _WIN32
+    // 4. Probar lanzamiento real con prioridad alta + afinidad sobre cmd.exe /c exit 0
+    WinOpty::Modules::DetectedGame cmdTask{"System", "SmokeCmd", "C:\\Windows\\System32\\cmd.exe", "/c exit 0"};
+    uint32_t pid = 0;
+    auto launchRes = launcher.LaunchGame(cmdTask, &pid);
+    assert(launchRes.ok);
+    assert(pid > 0);
+#endif
+
+    fs::remove_all(tmpDir);
+    std::cout << "[PASS] TestPriorityLauncherHelpersAndLaunch\n";
+}
+
 } // namespace
 
 int main() {
@@ -130,6 +192,7 @@ int main() {
     TestBackupRoundTrip();
     TestPresetsAndTweakEngineDryRun();
     TestCacheCleanerSandbox();
+    TestPriorityLauncherHelpersAndLaunch();
     std::cout << "\nTodos los tests unitarios de Parte A pasaron correctamente.\n";
     return 0;
 }
