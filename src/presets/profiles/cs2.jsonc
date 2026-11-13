@@ -1,0 +1,15 @@
+// ============================================================================
+// Perfil Competitivo: Counter-Strike 2
+// ============================================================================
+{
+  "executable": "cs2.exe",
+  "profileName": "Perfil Competitivo CS2",
+  "cpuPriority": "High",
+  "bindFastCoresOnly": true,
+  "preCleanRamOnStart": true,
+  "disableFullscreenOptimizations": false,
+  "clearShaderCacheOnUpdate": true,
+  "launchArguments": "-novid -high",
+  "suspendBackgroundServices": true,
+  "notes": "No inyectar DLLs en proceso para mantener compatibilidad con VAC."
+}

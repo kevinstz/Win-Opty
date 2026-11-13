@@ -17,9 +17,9 @@ Estoy iniciando la construccion desde los **cimientos seguros del proyecto**: es
   - Implementar `src/core/engine_config.hpp` y `src/core/module_interfaces.hpp` con todas las estructuras de `README.md` para desbloquear el trabajo en paralelo de Parte B.
 
 ### Sprint A2 — Capa Declarativa y Scripts Verificables (Windows)
-- [ ] **TASK-A2: Catalogo de Presets y Perfiles JSONC** (`feat/part-a-presets-and-scripts`)
+- [x] **TASK-A2: Catalogo de Presets y Perfiles JSONC** (`feat/part-a-presets-and-scripts`)
   - Crear `src/presets/packs.jsonc`, `safe.jsonc`, `medium.jsonc`, `extreme.jsonc` y `profiles/{fortnite,valorant,cs2}.jsonc`.
-- [ ] **TASK-A3: Scripts PowerShell auditables con respaldo y rollback** (`feat/part-a-presets-and-scripts`)
+- [x] **TASK-A3: Scripts PowerShell auditables con respaldo y rollback** (`feat/part-a-presets-and-scripts`)
   - Crear `scripts/windows/common_backup.ps1`, `apply_extreme.ps1`, `rollback_tweaks.ps1` y `verify_state.ps1` con soporte `-DryRun`.
 
 ### Sprint A3 — Nucleo C++ Parte A + Pruebas

@@ -1,0 +1,23 @@
+// ============================================================================
+// Preset SEGURO: limpieza de RAM/cache, respaldo previo y cero cambios agresivos
+// ============================================================================
+{
+  "presetId": "SEGURO",
+  "displayName": "Seguro (Conservador)",
+  "description": "Ideal para uso diario: respaldo automatico, limpieza segura de RAM y cache sin tocar servicios base.",
+  "createRestorePoint": true,
+  "memoryCleaner": {
+    "clearSystemWorkingSet": true,
+    "clearStandbyPageLists": true,
+    "clearModifiedPageLists": false,
+    "autoCleanThresholdPct": 80,
+    "intervalSeconds": 300
+  },
+  "cacheCleaner": {
+    "cleanOsTempFiles": true,
+    "cleanShaderCaches": false,
+    "cleanBrowserCaches": false,
+    "cleanGameLogs": true
+  },
+  "enabledPackIds": []
+}
